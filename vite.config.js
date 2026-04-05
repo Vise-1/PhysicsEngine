@@ -6,7 +6,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, '2dsim.html'), // Set home.html as your main entry
-        other: resolve(__dirname, 'index.html'), 
+        other: resolve(__dirname, '3dsim.html'), 
       },
     },
   },
