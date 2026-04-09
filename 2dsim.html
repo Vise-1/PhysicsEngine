@@ -2,7 +2,11 @@
 
 <html>
     <head>
-        <title>2d Sim</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>2D Ball Sim</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
     </head>
 
@@ -15,112 +19,12 @@
             <input type="range" min="1" max="100" value="10" class="slider" id="gRange">
             </div>
             
+            <button style="margin: 20px;">Add Ball</button>
+            <button style="margin: 20px;">Remove Ball</button>
             <button style="margin: 20px;" onclick="window.location.reload();">Restart Sim</button>
             <button id='3ddirect' style="margin: 20px;">3D Physics Engine</button>
         </div>
 
-
-
-        <script>
-
-            // Canvas and coordinate conversion
-            var canvas = document.getElementById("2dcanvas");
-            var ctx = canvas.getContext("2d");
-
-            const directbtn = document.getElementById('3ddirect');
-
-            directbtn.addEventListener('click', () => {
-                // This tells the browser to move to the other page
-                window.location.href = '/3dsim.html'; 
-            });
-
-
-            canvas.width = window.innerWidth - 20;
-            canvas.height = window.innerHeight -150;
-
-            var simMinWidth = 20.0;
-            var cScale = Math.min(canvas.width, canvas.height)/ simMinWidth;
-            var simWidth = canvas.width/cScale;
-            var simHeight = canvas.height/cScale;
-
-            function cX(pos){
-                return pos.x * cScale;
-            }
-
-            function cX(pos){
-                return pos.x * cScale;
-            }
-
-            function cY(pos){
-                return canvas.height - pos.y * cScale;
-            }
-
-            // Make scene 
-            var gravity = {x: 0.0, y: -10.0}
-            var timestep = 1.0/ 60.0;
-
-            
-            var ball = {
-                radius : 0.2, 
-                pos: {x: 0.2, y:0.2},
-                vel: {x:10.0, y:15.0}
-
-            }
-
-
-            const gSlider = document.getElementById("gRange");
-            const gtext = document.getElementById("gtext");
-            gSlider.addEventListener('input', function(){
-                gravity.y = -this.value;
-                gtext.textContent = -gravity.y;
-            })
-            
-
-            // Draw Simulate Update
-            function draw(){
-                ctx.clearRect(0,0, canvas.width, canvas.height);
-
-                ctx.fillStyle = "#FF0000";
-
-                ctx.beginPath();
-                ctx.arc(
-                    cX(ball.pos), cY(ball.pos), cScale * ball.radius, 0.0, 2.0* Math.PI);
-                ctx.closePath();
-                ctx.fill()
-            }
-
-            function simulate(){
-                
-                ball.vel.x += gravity.x * timestep;
-                ball.vel.y += gravity.y * timestep;
-                ball.pos.x += ball.vel.x * timestep;
-                ball.pos.y += ball.vel.y * timestep;
-
-                if (ball.pos.x < 0.0) {
-                    ball.pos.x = 0.0;
-                    ball.vel.x = -ball.vel.x;
-                }
-
-                 if (ball.pos.x > simWidth) {
-                    ball.pos.x = simWidth;
-                    ball.vel.x = -ball.vel.x;
-                }
-               
-                if (ball.pos.y < 0.0) {
-                    ball.pos.y = 0.0;
-                    ball.vel.y = -ball.vel.y;
-                }
-                
-            }
-
-            function update(){
-                simulate();
-                draw();
-                requestAnimationFrame(update);
-            }
-            
-
-            update()
-        </script>
+        <script type="module" src="2dsim.js"></script>
     </body>
 </html>
