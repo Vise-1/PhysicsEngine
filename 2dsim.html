@@ -18,9 +18,14 @@
             <p>Gravity: <span id="gtext">10.0</span> m/s2</p>
             <input type="range" min="1" max="100" value="10" class="slider" id="gRange">
             </div>
+
+            <div class="slidecontainer" style="padding: 10px;">
+            <p>Restitution: <span id="restText">1</span></p>
+            <input type="range" min="0" max="1" step="0.01" value="1" class="slider" id="restRange">
+            </div>
             
-            <button style="margin: 20px;">Add Ball</button>
-            <button style="margin: 20px;">Remove Ball</button>
+            <button style="margin: 20px;" id="addbtn">Add Ball</button>
+            <button style="margin: 20px;" id ="removebtn">Remove Ball</button>
             <button style="margin: 20px;" onclick="window.location.reload();">Restart Sim</button>
             <button id='3ddirect' style="margin: 20px;">3D Physics Engine</button>
         </div>

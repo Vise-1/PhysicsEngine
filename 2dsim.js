@@ -87,11 +87,12 @@
             }
 
             class Ball{
-                constructor(radius, mass, pos, vel){
+                constructor(radius, mass, pos, vel, col){
                     this.radius = radius;
                     this.mass = mass;
                     this.pos = pos;
                     this.vel = vel;
+                    this.col = col;
                 }
 
                 simulate(dt, gravity){
@@ -106,7 +107,8 @@
                 worldsize : new Vector2(simWidth, simHeight),
                 paused: true,
                 balls : [],
-                restitution: 1.0
+                restitution: 1.0,
+                col : Math.floor(360 * Math.random())
             }
 
             function setupScene(){
@@ -114,31 +116,29 @@
                 var numBalls = 20;
 
                 for (let i=0 ; i < numBalls; i++){
-                    var radius = 0.05 + Math.random() * 0.1;
+                    var radius = 0.03 + Math.random() * 0.025;
                     var mass = Math.PI * radius * radius;
                     var pos = new Vector2(Math.random() * simWidth, Math.random() * simHeight);
                     var vel = new Vector2(-1.0 + Math.random() * 2.0, -1.0 + Math.random() * 2.0);
-                    
-                    PhysicsScene.balls.push(new Ball(radius, mass, pos, vel));
+                    var col = Math.floor(360 * Math.random());
+
+                    PhysicsScene.balls.push(new Ball(radius, mass, pos, vel, col));
                 }
             }
             
+            function addBall(){
+                var radius = 0.03 + Math.random() * 0.025;
+                var mass = Math.PI * radius * radius;
+                var pos = new Vector2(Math.random() * simWidth, Math.random() * simHeight);
+                var vel = new Vector2(-1.0 + Math.random() * 2.0, -1.0 + Math.random() * 2.0);
+                var col = Math.floor(360 * Math.random());
+                    
+                PhysicsScene.balls.push(new Ball(radius, mass, pos, vel, col));
+                console.log('yo')
+            }
 
-            // Draw Simulate Update
-            function draw(){
-                ctx.clearRect(0,0, canvas.width, canvas.height);
-
-                ctx.fillStyle = "#FF0000";
-
-                for (let i = 0 ; i < PhysicsScene.balls.length; i++){
-                    var ball = PhysicsScene.balls[i];
-                    ctx.beginPath();
-                    ctx.arc(
-                        cX(ball.pos), cY(ball.pos), cScale * ball.radius, 0.0, 2.0 * Math.PI);
-                    ctx.closePath();
-                    ctx.fill();
-
-                }
+            function removeBall(){
+                PhysicsScene.balls.pop();
             }
 
             function handleBallCollision(ball1, ball2, restitution){
@@ -208,6 +208,27 @@
                 
             }
 
+            
+            // Draw Simulate Update
+            function draw(){
+                ctx.clearRect(0,0, canvas.width, canvas.height);
+
+                ctx.fillStyle = "#FF0000";
+
+                for (let i = 0 ; i < PhysicsScene.balls.length; i++){
+                    var ball = PhysicsScene.balls[i];
+                    ctx.beginPath();
+                    ctx.fillStyle ='hsl(' + ball.col + ', 50%, 50%)';
+;
+                    ctx.arc(
+                        cX(ball.pos), cY(ball.pos), cScale * ball.radius, 0.0, 2.0 * Math.PI);
+                    ctx.closePath();
+                    ctx.fill();
+
+                }
+            }
+
+
             function update(){
                 simulate();
                 draw();
@@ -223,3 +244,17 @@
                 PhysicsScene.gravity.y = -this.value;
                 gtext.textContent = -PhysicsScene.gravity.y;
             })
+
+            const restSlider = document.getElementById("restRange");
+            const restText = document.getElementById("restText");
+            restSlider.addEventListener('input', function(){
+                PhysicsScene.restitution = this.value;
+                restText.textContent = PhysicsScene.restitution;
+            })
+
+            
+            const addbtn = document.getElementById("addbtn");
+            addbtn.addEventListener('click', addBall);
+
+            const removebtn = document.getElementById("removebtn");
+            removebtn.addEventListener('click', removeBall);
